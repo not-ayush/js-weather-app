@@ -37,7 +37,7 @@ body {
 .search-form button {
   padding: 15px 30px;
   font-size: 1em;
-  background-color: #3498db;
+  background-color: #12517c;
   color: white;
   border: none;
   border-radius: 0 30px 30px 0;
@@ -95,12 +95,34 @@ body {
 .weather-item span:last-child {
   color: #34495e;
 }
+
+.loading-banner {
+  background-color: rgba(0, 0, 0, 0.723);
+  color: white;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: content-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+
+.loading-banner.currently-loading {
+  display: flex;
+}
+
 @media (max-width: 768px) {
   .weather-info {
     flex-direction: column;
+    width: 80vw;
   }
   .weather-column {
     width: 100%;
+  }
+  .container {
+    padding: 10px;
   }
 }
 

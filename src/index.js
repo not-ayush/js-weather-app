@@ -3,15 +3,16 @@ import "./styles.css";
 async function getRawData(location) {
     // make the request and return relevant data when resolved
     try {
+        let key = "SZU4SR6MBHHMX" + "KBRVGQXXVJU2";
         let response = await fetch(
-            `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/today?unitGroup=metric&include=current&key=SZU4SR6MBHHMXKBRVGQXXVJU2&contentType=json`,
+            `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/today?unitGroup=metric&include=current&key=${key}&contentType=json`,
             { mode: "cors" }
         );
         if (response.status == 200) {
             let jsResponse = await response.json();
             return formatRawData(jsResponse);
         } else {
-            alert("Our server can't be reached right now.");
+            alert("That location can't be found.");
         }
     } catch (error) {
         console.log(error);
@@ -43,23 +44,30 @@ function formatRawData(data) {
         },
     };
 }
-// getRawData(prompt("enter location to get the data at.")).then(console.log);
 
 const searchBtn = document.querySelector("#search");
 const inputElem = document.querySelector("#location-input");
 const address = document.querySelector(".selected-address");
 const current = document.querySelector(".current");
 const today = document.querySelector(".today");
-const form = document.querySelector(".search-form")
+const form = document.querySelector(".search-form");
+const loadingBanner = document.querySelector(".loading-banner");
 
 searchBtn.addEventListener("click", (e) => {
     e.preventDefault();
     if (inputElem.value != "") {
-        getRawData(inputElem.value).then(updateDom).then(form.reset());
+        loadingBanner.classList.toggle("currently-loading");
+        getRawData(inputElem.value)
+            .then(updateDom)
+            .finally(() => {
+                form.reset();
+                loadingBanner.classList.toggle("currently-loading");
+            });
     }
 });
 
 function updateDom(dataObj) {
+    if (!dataObj) return;
     address.textContent = dataObj.address;
     updateWeatherInfo(current, dataObj);
     updateWeatherInfo(today, dataObj);
