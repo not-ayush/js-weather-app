@@ -11,28 +11,14 @@ module.exports = {
     mode: "development",
     module: {
         rules: [
-            // {
-            //     test: /\.css$/i,
-            //     use: ["style-loader", "css-loader"],
-            // },
-            // {
-            //     test: /\.(png|svg|jpg|jpeg|gif)$/i,
-            //     type: "asset/resource",
-            //     generator: {
-            //         filename: 'img/[name][ext]',
-            //     },
-            // },
-            // {
-            //     test: /\.(woff|woff2|eot|ttf|otf)$/i,
-            //     type: "asset/resource",
-            //     generator: {
-            //         filename: 'fonts/[name][ext]',
-            //     },
-            // },
-            // {
-            //     test: /\.html$/i,
-            //     loader: "html-loader",
-            // },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+            {
+                test: /\.html$/i,
+                loader: "html-loader",
+            },
         ],
     },
     plugins: [

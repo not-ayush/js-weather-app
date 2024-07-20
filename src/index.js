@@ -1,3 +1,5 @@
+import "./styles.css";
+
 async function getRawData(location) {
     // make the request and return relevant data when resolved
     try {
@@ -23,7 +25,6 @@ function formatRawData(data) {
         address: data.resolvedAddress,
         current: {
             datetime: data.currentConditions["datetime"],
-            datetimeEpoch: data.currentConditions["datetimeEpoch"],
             temp: data.currentConditions["temp"],
             feelslike: data.currentConditions["feelslike"],
             humidity: data.currentConditions["humidity"],
@@ -42,5 +43,40 @@ function formatRawData(data) {
         },
     };
 }
+// getRawData(prompt("enter location to get the data at.")).then(console.log);
 
-getRawData(prompt("enter location to get the data at.")).then(console.log);
+const searchBtn = document.querySelector("#search");
+const inputElem = document.querySelector("#location-input");
+const address = document.querySelector(".selected-address");
+const current = document.querySelector(".current");
+const today = document.querySelector(".today");
+const form = document.querySelector(".search-form")
+
+searchBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (inputElem.value != "") {
+        getRawData(inputElem.value).then(updateDom).then(form.reset());
+    }
+});
+
+function updateDom(dataObj) {
+    address.textContent = dataObj.address;
+    updateWeatherInfo(current, dataObj);
+    updateWeatherInfo(today, dataObj);
+}
+
+function updateWeatherInfo(infoElem, dataObj) {
+    for (let curNode of infoElem.children) {
+        if (curNode.nodeName != "DIV") {
+            continue;
+        }
+        let dataElem = curNode.firstElementChild;
+        let dataId = dataElem.getAttribute("id");
+        if (infoElem.classList.contains("current")) {
+            dataElem.textContent = dataObj.current[dataId];
+        } else {
+            dataElem.textContent = dataObj.today[dataId];
+        }
+    }
+}
+
